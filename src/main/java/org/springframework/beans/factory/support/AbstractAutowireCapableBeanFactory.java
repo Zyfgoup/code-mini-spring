@@ -10,6 +10,8 @@ import org.springframework.beans.factory.config.BeanDefinition;
  **/
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
 
+    private InstantiationStrategy instantiationStrategy = new SimpleInstantiationStrategy();
+
     @Override
     protected Object createBean(String name, BeanDefinition beanDefinition) {
         return doCreateBean(name,beanDefinition);
@@ -20,7 +22,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Object bean = null;
 
         try {
-            bean = clazz.getDeclaredConstructor().newInstance();
+            //由具体的实例化策略来实例化Bean
+            bean = createBeanInstance(beanDefinition);
         }catch (Exception e){
             throw new BeansException("实例化错误");
         }
@@ -28,6 +31,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         addSingleton(name,bean);
         return bean;
     }
+
+    protected Object createBeanInstance(BeanDefinition beanDefinition){
+        return getInstantiationStrategy().instantiate(beanDefinition);
+    }
+
+    public InstantiationStrategy getInstantiationStrategy() {
+        return instantiationStrategy;
+    }
+
+    public void setInstantiationStrategy(InstantiationStrategy instantiationStrategy) {
+        this.instantiationStrategy = instantiationStrategy;
+    }
+
+
 
 
 }

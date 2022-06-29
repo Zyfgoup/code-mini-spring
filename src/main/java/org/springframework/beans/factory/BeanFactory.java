@@ -1,17 +1,16 @@
 package org.springframework.beans.factory;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @Author Zyfgoup
  * @Date 2022/6/29 11:18
  * @Description bean工厂
  **/
-public class BeanFactory {
-    private Map<String,Object> beanMap = new HashMap<>();
+public interface BeanFactory {
 
-    public void registerBean(String name,Object bean){beanMap.put(name,bean);}
-
-    public Object getBean(String name){return beanMap.get(name);}
+    /**
+     * 获取bean
+     * @param name
+     * @return
+     */
+     Object getBean(String name);
 }
